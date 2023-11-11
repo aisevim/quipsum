@@ -1,0 +1,89 @@
+{
+  "name": "quipsum",
+  "displayName": "quipsum",
+  "description": "",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.84.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "*"
+  ],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "configuration": {
+      "title": "Quipsum",
+      "properties": {
+        "quipsum.default": {
+          "type": "string",
+          "default": "sentences",
+          "description": "The default unit for the 'lorem' command in the extension.",
+          "enum": ["sentences", "words", "paragraphs"],
+          "enumDescriptions": [
+            "Use sentences as the unit",
+            "Use words as the unit",
+            "Use paragraphs as the unit"
+          ]
+        },
+        "quipsum.units": {
+          "type": "object",
+          "properties": {
+            "sentences": {
+              "type": "string",
+              "default": "s",
+              "description": "The unit symbol for sentences in the 'lorem' command."
+            },
+            "words": {
+              "type": "string",
+              "default": "w",
+              "description": "The unit symbol for words in the 'lorem' command."
+            },
+            "paragraphs": {
+              "type": "string",
+              "default": "p",
+              "description": "The unit symbol for paragraphs in the 'lorem' command."
+            }
+          }
+        },
+        "quipsum.count.default": {
+          "type": "integer",
+          "default": 1,
+          "description": "The default count for the 'lorem' command in the extension.",
+          "minimum": 1
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "pnpm run package",
+    "compile": "webpack",
+    "watch": "webpack --watch",
+    "package": "webpack --mode production --devtool hidden-source-map",
+    "compile-tests": "tsc -p . --outDir out",
+    "watch-tests": "tsc -p . -w --outDir out",
+    "pretest": "pnpm run compile-tests && pnpm run compile && pnpm run lint",
+    "lint": "eslint src --ext ts",
+    "test": "node ./out/test/runTest.js"
+  },
+  "devDependencies": {
+    "@types/mocha": "^10.0.3",
+    "@types/node": "18.x",
+    "@types/vscode": "^1.84.0",
+    "@typescript-eslint/eslint-plugin": "^6.9.0",
+    "@typescript-eslint/parser": "^6.9.0",
+    "@vscode/test-electron": "^2.3.6",
+    "eslint": "^8.52.0",
+    "glob": "^10.3.10",
+    "mocha": "^10.2.0",
+    "ts-loader": "^9.5.0",
+    "typescript": "^5.2.2",
+    "webpack": "^5.89.0",
+    "webpack-cli": "^5.1.4"
+  },
+  "dependencies": {
+    "lorem-ipsum": "^2.0.8"
+  }
+}

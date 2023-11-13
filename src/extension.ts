@@ -1,63 +1,70 @@
 import * as vscode from 'vscode';
-import { loremIpsum } from "lorem-ipsum";
+import { readFileSync } from 'fs';
+import { resolve } from 'path';
+import { loremIpsum } from 'lorem-ipsum';
+import packageJson from '../package.json';
 
 import type { LoremUnit } from 'lorem-ipsum/types/src/constants/units';
 
 export function activate(context: vscode.ExtensionContext) {
-  const provider1 = vscode.languages.registerCompletionItemProvider('*', {
+  const provider = vscode.languages.registerCompletionItemProvider('*', {
     provideCompletionItems(document: vscode.TextDocument, position: vscode.Position) {
-      const config = vscode.workspace.getConfiguration('quipsum');
-      const wordRange = document.getWordRangeAtPosition(position, createDynamicRegex(config));
-      const matches = document.getText(wordRange)?.match(createDynamicRegex(config));
+      const wordRange = document.getWordRangeAtPosition(position, createDynamicRegex());
+      const matches = document.getText(wordRange)?.match(createDynamicRegex());
 
       if (!matches || !wordRange) {
         return [];
       }
 
-      const number = matches[1] ? parseInt(matches[1], 10) : config.get('count.default', 1);
-      const unitKey = matches[2] || config.get('default', 'sentences');
-      const unit = mapUnitKeyToLoremUnit(unitKey, config);
-
-      const loremText = generateLoremText(number, unit);
+      const [count, unit] = getCountAndUnit(matches);
+      const loremText = generateLoremText(count, unit);
       const currentWord = document.getText(wordRange);
 
       const snippetCompletion = new vscode.CompletionItem(currentWord);
       snippetCompletion.insertText = new vscode.SnippetString(loremText);
 
-      return [
-        snippetCompletion,
-      ];
+      return [snippetCompletion];
     }
   });
 
-  context.subscriptions.push(provider1);
+  context.subscriptions.push(provider);
+}
+
+function getConfigValue(key: string): any {
+  const config = vscode.workspace.getConfiguration();
+
+  return config.get(key);
+}
+
+function getUnitTypeMapping(): Record<string, LoremUnit> {
+  return {
+    [getConfigValue('quipsum.units.sentences')]: 'sentences',
+    [getConfigValue('quipsum.units.paragraphs')]: 'paragraphs',
+    [getConfigValue('quipsum.units.words')]: 'words',
+  };
+}
+
+function getCountAndUnit(matches: RegExpMatchArray): [number, LoremUnit] {
+  const count = matches[1] ? parseInt(matches[1], 10) : getConfigValue('quipsum.count.default');
+  const unit = getUnitTypeMapping()[matches[2]] || getConfigValue('quipsum.default');
+
+  return [count, unit];
 }
 
 function generateLoremText(count: number, unit: LoremUnit): string {
   return loremIpsum({
     count,
+    paragraphLowerBound: getConfigValue('quipsum.paragraphLowerBound'),
+    paragraphUpperBound: getConfigValue('quipsum.paragraphUpperBound'),
+    sentenceLowerBound: getConfigValue('quipsum.sentenceLowerBound'),
+    sentenceUpperBound: getConfigValue('quipsum.sentenceUpperBound'),
+    suffix: getConfigValue('quipsum.suffix'),
     units: unit,
   });
 }
 
-function mapUnitKeyToLoremUnit(unitKey: string, config: vscode.WorkspaceConfiguration): LoremUnit {
-  const unitMapping: Record<string, LoremUnit> = {
-    [config.get('units.sentences', 's')]: "sentences",
-    [config.get('units.words', 'w')]: "words",
-    [config.get('units.paragraphs', 'p')]: "paragraphs",
-  };
-
-  return unitMapping[unitKey] || config.get('default', 'sentences');
-}
-
-function createDynamicRegex(config: vscode.WorkspaceConfiguration): RegExp {
-  const unitMapping: Record<string, LoremUnit> = {
-    [config.get('units.sentences', 's')]: "sentences",
-    [config.get('units.words', 'w')]: "words",
-    [config.get('units.paragraphs', 'p')]: "paragraphs",
-  };
-  
-  const regexString = `lorem(\\d+)?(${Object.keys(unitMapping).join('|')})?`;
+function createDynamicRegex(): RegExp {
+  const regexString = `lorem(\\d+)?(${Object.keys(getUnitTypeMapping()).join('|')})?`;
 
   return new RegExp(regexString);
 }

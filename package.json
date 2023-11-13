@@ -28,30 +28,54 @@
             "Use paragraphs as the unit"
           ]
         },
-        "quipsum.units": {
-          "type": "object",
-          "properties": {
-            "sentences": {
-              "type": "string",
-              "default": "s",
-              "description": "The unit symbol for sentences in the 'lorem' command."
-            },
-            "words": {
-              "type": "string",
-              "default": "w",
-              "description": "The unit symbol for words in the 'lorem' command."
-            },
-            "paragraphs": {
-              "type": "string",
-              "default": "p",
-              "description": "The unit symbol for paragraphs in the 'lorem' command."
-            }
-          }
+        "quipsum.units.sentences": {
+          "type": "string",
+          "default": "s",
+          "description": "The unit symbol for sentences in the 'lorem' command."
+        },
+        "quipsum.units.words": {
+          "type": "string",
+          "default": "w",
+          "description": "The unit symbol for words in the 'lorem' command."
+        },
+        "quipsum.units.paragraphs": {
+          "type": "string",
+          "default": "p",
+          "description": "The unit symbol for paragraphs in the 'lorem' command."
         },
         "quipsum.count.default": {
           "type": "integer",
           "default": 1,
           "description": "The default count for the 'lorem' command in the extension.",
+          "minimum": 1
+        },
+        "quipsum.suffix": {
+          "type": "string",
+          "default": "\n",
+          "description": "Line ending"
+        },
+        "quipsum.paragraphLowerBound": {
+          "type": "integer",
+          "default": 3,
+          "description": "Min. number of sentences per paragraph.",
+          "minimum": 0
+        },
+        "quipsum.paragraphUpperBound": {
+          "type": "integer",
+          "default": 7,
+          "description": "Max. number of sentences per paragraph.",
+          "minimum": 1
+        },
+        "quipsum.sentenceLowerBound": {
+          "type": "integer",
+          "default": 5,
+          "description": "Min. number of words per sentence.",
+          "minimum": 0
+        },
+        "quipsum.sentenceUpperBound": {
+          "type": "integer",
+          "default": 15,
+          "description": "Max. number of words per sentence.",
           "minimum": 1
         }
       }

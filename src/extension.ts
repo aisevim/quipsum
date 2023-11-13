@@ -1,70 +1,78 @@
 import * as vscode from 'vscode';
-import { readFileSync } from 'fs';
-import { resolve } from 'path';
 import { loremIpsum } from 'lorem-ipsum';
-import packageJson from '../package.json';
 
 import type { LoremUnit } from 'lorem-ipsum/types/src/constants/units';
 
 export function activate(context: vscode.ExtensionContext) {
   const provider = vscode.languages.registerCompletionItemProvider('*', {
     provideCompletionItems(document: vscode.TextDocument, position: vscode.Position) {
-      const wordRange = document.getWordRangeAtPosition(position, createDynamicRegex());
-      const matches = document.getText(wordRange)?.match(createDynamicRegex());
-
-      if (!matches || !wordRange) {
-        return [];
-      }
-
-      const [count, unit] = getCountAndUnit(matches);
-      const loremText = generateLoremText(count, unit);
-      const currentWord = document.getText(wordRange);
-
-      const snippetCompletion = new vscode.CompletionItem(currentWord);
-      snippetCompletion.insertText = new vscode.SnippetString(loremText);
-
-      return [snippetCompletion];
+      const quipsumGenerator = new QuipsumGenerator(document, position);
+      return quipsumGenerator.generateCompletionItems();
     }
   });
 
   context.subscriptions.push(provider);
 }
 
-function getConfigValue(key: string): any {
-  const config = vscode.workspace.getConfiguration();
+export class QuipsumGenerator {
+  private config: vscode.WorkspaceConfiguration;
+  private unitTypeMapping: Record<string, LoremUnit>;
+  private document: vscode.TextDocument;
+  private position: vscode.Position;
+  private triggerText: string | undefined;
 
-  return config.get(key);
-}
+  constructor(document: vscode.TextDocument, position: vscode.Position) {
+    this.config = vscode.workspace.getConfiguration();
+    this.unitTypeMapping = {
+      [this.config.get('quipsum.units.sentences') as string]: 'sentences',
+      [this.config.get('quipsum.units.paragraphs') as string]: 'paragraphs',
+      [this.config.get('quipsum.units.words') as string]: 'words',
+    };
+    this.triggerText = this.config.get('quipsum.triggerText');
+    this.document = document;
+    this.position = position;
+  }
 
-function getUnitTypeMapping(): Record<string, LoremUnit> {
-  return {
-    [getConfigValue('quipsum.units.sentences')]: 'sentences',
-    [getConfigValue('quipsum.units.paragraphs')]: 'paragraphs',
-    [getConfigValue('quipsum.units.words')]: 'words',
-  };
-}
+  generateCompletionItems() {
+    const wordRange = this.document.getWordRangeAtPosition(this.position, this.createDynamicRegex());
+    const matches = this.document.getText(wordRange)?.match(this.createDynamicRegex());
 
-function getCountAndUnit(matches: RegExpMatchArray): [number, LoremUnit] {
-  const count = matches[1] ? parseInt(matches[1], 10) : getConfigValue('quipsum.count.default');
-  const unit = getUnitTypeMapping()[matches[2]] || getConfigValue('quipsum.default');
+    if (!matches?.length || !wordRange) {
+      return [];
+    }
 
-  return [count, unit];
-}
+    const [count, unit] = this.getCountAndUnit(matches);
+    const loremText = this.generateLoremText(count, unit);
+    const currentWord = this.document.getText(wordRange);
 
-function generateLoremText(count: number, unit: LoremUnit): string {
-  return loremIpsum({
-    count,
-    paragraphLowerBound: getConfigValue('quipsum.paragraphLowerBound'),
-    paragraphUpperBound: getConfigValue('quipsum.paragraphUpperBound'),
-    sentenceLowerBound: getConfigValue('quipsum.sentenceLowerBound'),
-    sentenceUpperBound: getConfigValue('quipsum.sentenceUpperBound'),
-    suffix: getConfigValue('quipsum.suffix'),
-    units: unit,
-  });
-}
+    const snippetCompletion = new vscode.CompletionItem(currentWord);
+    snippetCompletion.insertText = new vscode.SnippetString(loremText);
 
-function createDynamicRegex(): RegExp {
-  const regexString = `lorem(\\d+)?(${Object.keys(getUnitTypeMapping()).join('|')})?`;
+    return [snippetCompletion];
+  }
 
-  return new RegExp(regexString);
+  getCountAndUnit(matches: RegExpMatchArray): [number, LoremUnit] {
+    const count = matches[1] ? parseInt(matches[1], 10) : this.config.get('quipsum.count.default') as number;
+    const unit = this.unitTypeMapping[matches[2]] || this.config.get('quipsum.default');
+
+    return [count, unit];
+  }
+
+  generateLoremText(count: number, unit: LoremUnit): string {
+    return loremIpsum({
+      count,
+      paragraphLowerBound: this.config.get('quipsum.paragraphLowerBound'),
+      paragraphUpperBound: this.config.get('quipsum.paragraphUpperBound'),
+      sentenceLowerBound: this.config.get('quipsum.sentenceLowerBound'),
+      sentenceUpperBound: this.config.get('quipsum.sentenceUpperBound'),
+      suffix: this.config.get('quipsum.suffix'),
+      units: unit,
+    });
+  }
+
+  createDynamicRegex(): RegExp {
+    const regexString = `${this.triggerText}(\\d+)?(${Object.keys(this.unitTypeMapping).join('|')})?`;
+
+    return new RegExp(regexString);
+  }
 }

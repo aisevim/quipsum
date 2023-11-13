@@ -52,8 +52,8 @@ export class QuipsumGenerator {
   }
 
   getCountAndUnit(matches: RegExpMatchArray): [number, LoremUnit] {
-    const count = matches[1] ? parseInt(matches[1], 10) : this.config.get('quipsum.count.default') as number;
-    const unit = this.unitTypeMapping[matches[2]] || this.config.get('quipsum.default');
+    const count = matches[1] ? parseInt(matches[1], 10) : this.config.get('quipsum.count') as number;
+    const unit = this.unitTypeMapping[matches[2]] || this.config.get('quipsum.unit');
 
     return [count, unit];
   }

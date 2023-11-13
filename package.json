@@ -1,7 +1,7 @@
 {
   "name": "quipsum",
   "displayName": "quipsum",
-  "description": "Snippets: Dynamic lorem ipsum generator and completely customizable",
+  "description": "Snippets: lorem ipsum generator and completely customizable",
   "version": "0.0.1",
   "engines": {
     "vscode": "^1.84.0"
@@ -21,6 +21,16 @@
           "type": "string",
           "default": "lorem",
           "description": "The keyword that triggers the generation of placeholder text when typed in the editor."
+        },
+        "quipsum.unit": {
+          "type": "string",
+          "default": "sentences",
+          "enum": [
+            "sentences",
+            "words",
+            "paragraphs"
+          ],
+          "description": "The default unit for the 'quipsum.triggerText' command in the extension."
         },
         "quipsum.units.sentences": {
           "type": "string",
@@ -87,6 +97,7 @@
     "test": "node ./out/test/runTest.js"
   },
   "devDependencies": {
+    "@types/mocha": "^10.0.3",
     "@types/node": "18.x",
     "@types/vscode": "^1.84.0",
     "@typescript-eslint/eslint-plugin": "^6.9.0",
@@ -94,6 +105,7 @@
     "@vscode/test-electron": "^2.3.6",
     "eslint": "^8.52.0",
     "glob": "^10.3.10",
+    "mocha": "^10.2.0",
     "ts-loader": "^9.5.0",
     "typescript": "^5.2.2",
     "webpack": "^5.89.0",
@@ -102,4 +114,4 @@
   "dependencies": {
     "lorem-ipsum": "^2.0.8"
   }
-}
+};

@@ -3,7 +3,7 @@
   "name": "quipsum",
   "displayName": "Quipsum",
   "description": "Snippets: lorem ipsum generator and completely customizable",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "private": true,
   "packageManager": "pnpm@8.10.2",
   "engines": {
@@ -37,7 +37,7 @@
   ],
   "galleryBanner": {
     "color": "#fee7f0",
-    "theme": "dark"
+    "theme": "light"
   },
   "contributes": {
     "configuration": {
@@ -123,7 +123,8 @@
     "release:patch": "vsce publish patch",
     "release:minor": "vsce publish minor",
     "release:major": "vsce publish major",
-    "vscode:prepublish": "pnpm run package"
+    "vscode:prepublish": "pnpm run package",
+    "first": "standard-version --first-release"
   },
   "devDependencies": {
     "@types/mocha": "^10.0.3",
@@ -136,6 +137,7 @@
     "eslint": "^8.52.0",
     "glob": "^10.3.10",
     "mocha": "^10.2.0",
+    "standard-version": "^9.5.0",
     "ts-loader": "^9.5.0",
     "typescript": "^5.2.2",
     "webpack": "^5.89.0",

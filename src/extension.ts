@@ -51,14 +51,14 @@ export class QuipsumGenerator {
     return [snippetCompletion];
   }
 
-  getCountAndUnit(matches: RegExpMatchArray): [number, LoremUnit] {
+  private getCountAndUnit(matches: RegExpMatchArray): [number, LoremUnit] {
     const count = matches[1] ? parseInt(matches[1], 10) : this.config.get('quipsum.count') as number;
     const unit = this.unitTypeMapping[matches[2]] || this.config.get('quipsum.unit');
 
     return [count, unit];
   }
 
-  generateLoremText(count: number, unit: LoremUnit): string {
+  private generateLoremText(count: number, unit: LoremUnit): string {
     return loremIpsum({
       count,
       paragraphLowerBound: this.config.get('quipsum.paragraphLowerBound'),
@@ -70,7 +70,7 @@ export class QuipsumGenerator {
     });
   }
 
-  createDynamicRegex(): RegExp {
+  private createDynamicRegex(): RegExp {
     const regexString = `${this.triggerText}(\\d+)?(${Object.keys(this.unitTypeMapping).join('|')})?`;
 
     return new RegExp(regexString);

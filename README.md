@@ -1,71 +1,111 @@
-# quipsum README
+# Quipsum: Lorem ipsum Snippets Generator
 
-This is the README for your extension "quipsum". After writing up a brief description, we recommend including the following sections.
+<p align="center">
+  <img src="https://raw.githubusercontent.com/aisevim/quipsum/master/docs/assets/logo-mini.png" />
+</p>
+
+## Overview
+
+Quipsum is a Visual Studio Code extension that provides customizable snippets for generating Lorem Ipsum placeholder text within your code files.
+
+```js
+[triggerText][count]?[unit]?
+lorem 10 words
+
+// triggerText => The keyword that triggers the generation of placeholder
+// count => count of [sentences|words|paragraphs] generated
+// unit => sentences|words|paragraphs
+```
+
+## Snippet Examples
+
+- `lorem` : Inserts 5-15 sentences.
+<img src="https://raw.githubusercontent.com/aisevim/quipsum/master/docs/assets/lorem.gif" />
+
+- `lorem1` : Inserts 1 sentence.
+<img src="https://raw.githubusercontent.com/aisevim/quipsum/master/docs/assets/lorem1.gif" />
+
+- `loremp` : Inserts 1 paragraphe.
+<img src="https://raw.githubusercontent.com/aisevim/quipsum/master/docs/assets/loremp.gif" />
+
+- `loremw` : Inserts 1 word.
+<img src="https://raw.githubusercontent.com/aisevim/quipsum/master/docs/assets/loremw.gif" />
+
+- `lorem10w` : Inserts 10 words.
+<img src="https://raw.githubusercontent.com/aisevim/quipsum/master/docs/assets/lorem10w.gif" />
+
+### Customization
+
+```jsonc
+{
+	"quipsum.triggerText": "generate",
+	"quipsum.units.words": "words",
+}
+```
+- `generate10words` : Inserts 10 words.
+
+<img src="https://raw.githubusercontent.com/aisevim/quipsum/master/docs/assets/generate10words.gif" />
+
+```jsonc
+{
+	"quipsum.unit": "words",
+	"quipsum.count": 2,
+}
+```
+- `lorem` : Inserts 2 words.
+
+<img src="https://raw.githubusercontent.com/aisevim/quipsum/master/docs/assets/lorem2w.gif" />
 
 ## Features
 
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
+- **Customizable Snippets**: Easily customize the length and format of Lorem Ipsum text snippets according to your needs.
 
-For example if there is an image subfolder under your extension project workspace:
+- **Quick Insertion**: Insert Lorem Ipsum snippets with just a few keystrokes, saving you time and effort.
 
-\!\[feature X\]\(images/feature-x.png\)
+- **Rich Configuration**: Quipsum gives you the flexibility to generate the exact amount and type of filler text you need for your project.
 
-> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
+## Installation
 
-## Requirements
-
-If you have any requirements or dependencies, add a section describing those and how to install and configure them.
+1. Open VSCode.
+2. Go to the Extensions view (`Ctrl+Shift+X` or `Cmd+Shift+X`).
+3. Search for "quipsum" and install the plugin.
 
 ## Extension Settings
 
-Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
+| config                        | Description                                                                           | default     |
+| ----------------------------- | ------------------------------------------------------------------------------------- | ----------- |
+| `quipsum.triggerText`         | The keyword that triggers the generation of placeholder text when typed in the editor | `lorem`     |
+| `quipsum.unit`                | The default unit for the `quipsum.triggerText` command in the extension.              | `sentences` |
+| `quipsum.units.sentences`     | The unit symbol for sentences in the `quipsum.triggerText` command                    | `s`         |
+| `quipsum.units.words`         | The unit symbol for words in the `quipsum.triggerText` command.                       | `w`         |
+| `quipsum.units.paragraphs`    | The unit symbol for paragraphs in the `quipsum.triggerText` command                   | `p`         |
+| `quipsum.count`               | The default count for the 'quipsum.triggerText' command in the extension              | `1`         |
+| `quipsum.suffix`              | Line ending                                                                           | `\n`        |
+| `quipsum.paragraphLowerBound` | Min. number of sentences per paragraph                                                | `3`         |
+| `quipsum.paragraphUpperBound` | Max. number of sentences per paragraph                                                | `7`         |
+| `quipsum.sentenceLowerBound`  | Min. number of words per sentence                                                     | `5`         |
+| `quipsum.sentenceUpperBound`  | Max. number of words per sentence                                                     | `15`        |
 
-For example:
+## Troubleshooting
 
-This extension contributes the following settings:
+### Suggestions are not displayed
 
-* `myExtension.enable`: Enable/disable this extension.
-* `myExtension.thing`: Set to `blah` to do something.
+If you're experiencing issues where Visual Studio Code isn't automatically displaying suggestions in certain programming languages, you can modify your `settings.json` file with the following configuration:
 
-## Known Issues
+```jsonc
+"editor.quickSuggestions": {
+  "strings": true
+}
+```
 
-Calling out known issues can help limit users opening duplicate issues against your extension.
+This setting enables automatic suggestions inside strings.
+
+:warning: Warning: Enabling this setting will cause VS Code to display suggestions in all strings, which can be distracting or unwanted in some scenarios. Use this setting with caution.
+
+## License
+
+This project is licensed under the [MIT License](LICENSE).
 
 ## Release Notes
 
-Users appreciate release notes as you update your extension.
-
-### 1.0.0
-
-Initial release of ...
-
-### 1.0.1
-
-Fixed issue #.
-
-### 1.1.0
-
-Added features X, Y, and Z.
-
----
-
-## Following extension guidelines
-
-Ensure that you've read through the extensions guidelines and follow the best practices for creating your extension.
-
-* [Extension Guidelines](https://code.visualstudio.com/api/references/extension-guidelines)
-
-## Working with Markdown
-
-You can author your README using Visual Studio Code. Here are some useful editor keyboard shortcuts:
-
-* Split the editor (`Cmd+\` on macOS or `Ctrl+\` on Windows and Linux).
-* Toggle preview (`Shift+Cmd+V` on macOS or `Shift+Ctrl+V` on Windows and Linux).
-* Press `Ctrl+Space` (Windows, Linux, macOS) to see a list of Markdown snippets.
-
-## For more information
-
-* [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-* [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
-
-**Enjoy!**
+See [CHANGELOG.md](CHANGELOG.md) for details on each release.

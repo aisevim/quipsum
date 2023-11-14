@@ -27,6 +27,18 @@
   },
   "icon": "docs/assets/logo-mini.png",
   "main": "./dist/extension.js",
+  "keywords": [
+    "lorem",
+    "lorem ipsum",
+    "lorem generator",
+    "lorem custom",
+    "text generator",
+    "snippets"
+  ],
+  "galleryBanner": {
+    "color": "#fee7f0",
+    "theme": "dark"
+  },
   "contributes": {
     "configuration": {
       "title": "Quipsum",
@@ -108,7 +120,9 @@
     "pretest": "pnpm run compile-tests && pnpm run compile && pnpm run lint",
     "lint": "eslint src --ext ts",
     "test": "node ./out/test/runTest.js",
-    "release": "vsce publish",
+    "release:patch": "vsce publish patch",
+    "release:minor": "vsce publish minor",
+    "release:major": "vsce publish major",
     "vscode:prepublish": "pnpm run package"
   },
   "devDependencies": {

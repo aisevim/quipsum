@@ -1,9 +1,5 @@
 # Quipsum: Lorem ipsum Snippets Generator
 
-<p align="center">
-  <img src="https://raw.githubusercontent.com/aisevim/quipsum/master/docs/assets/logo-mini.png" />
-</p>
-
 ## Overview
 
 Quipsum is a Visual Studio Code extension that provides customizable snippets for generating Lorem Ipsum placeholder text within your code files.

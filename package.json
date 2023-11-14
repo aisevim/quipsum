@@ -1,10 +1,13 @@
 {
   "name": "quipsum",
-  "displayName": "quipsum",
+  "displayName": "Quipsum",
   "description": "Snippets: lorem ipsum generator and completely customizable",
-  "version": "0.0.1",
+  "version": "0.0.0",
+  "private": true,
+  "packageManager": "pnpm@8.10.2",
   "engines": {
-    "vscode": "^1.84.0"
+    "vscode": "^1.84.0",
+    "node": ">=18.0.0"
   },
   "categories": [
     "Snippets"
@@ -12,6 +15,15 @@
   "activationEvents": [
     "onStartupFinished"
   ],
+  "license": "MIT",
+  "author": "aisevim <a.aydnlp.pro@gmail.com>",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/aisevim/quipsum.git"
+  },
+  "bugs": {
+    "url": "https://github.com/aisevim/quipsum/issues"
+  },
   "main": "./dist/extension.js",
   "contributes": {
     "configuration": {
@@ -103,6 +115,7 @@
     "@typescript-eslint/eslint-plugin": "^6.9.0",
     "@typescript-eslint/parser": "^6.9.0",
     "@vscode/test-electron": "^2.3.6",
+    "@vscode/vsce": "^2.22.0",
     "eslint": "^8.52.0",
     "glob": "^10.3.10",
     "mocha": "^10.2.0",

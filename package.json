@@ -120,11 +120,11 @@
     "pretest": "pnpm run compile-tests && pnpm run compile && pnpm run lint",
     "lint": "eslint src --ext ts",
     "test": "node ./out/test/runTest.js",
-    "release:patch": "vsce publish patch",
-    "release:minor": "vsce publish minor",
-    "release:major": "vsce publish major",
+    "release:patch": "standard-version patch && pnpm run publish",
+    "release:minor": "standard-version minor && pnpm run publish",
+    "release:major": "standard-version major && pnpm run publish",
     "vscode:prepublish": "pnpm run package",
-    "first": "standard-version --first-release"
+    "publish": "vsce publish --no-dependencies"
   },
   "devDependencies": {
     "@types/mocha": "^10.0.3",

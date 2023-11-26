@@ -56,8 +56,6 @@ lorem 10 words
 
 - **Quick Insertion**: Insert Lorem Ipsum snippets with just a few keystrokes, saving you time and effort.
 
-- **Rich Configuration**: Quipsum gives you the flexibility to generate the exact amount and type of filler text you need for your project.
-
 ## Installation
 
 1. Open VSCode.
